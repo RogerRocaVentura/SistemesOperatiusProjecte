@@ -1,0 +1,30 @@
+﻿<Window x:Class="Chess.GetHostIP"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chess"
+        mc:Ignorable="d"
+        Title="Welcome to Chess by Roger Roca" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    
+    <Grid Background="#212121" Unloaded="Grid_Unloaded">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Enter Host IP" Foreground="#EDEDED" FontSize="20" FontWeight="Bold" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"/>
+
+        <TextBox Text="127.0.0.1" Name="txtIP" FontSize="16" Foreground="#EDEDED" Background="#2D2D2D" BorderBrush="#4A4A4A" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Width="250"/>
+        
+        <Button Content="Connect" Name="btnC" FontSize="16" Foreground="#212121" Background="#EDEDED" BorderBrush="#4A4A4A" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" Width="150" Height="40" Click="btnC_Click"/>
+    </Grid>
+</Window>
