@@ -1,0 +1,51 @@
+﻿<Window x:Class="Chess.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Chess"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Background="#202020"
+        Title="Welcome to Chess by Roger Roca" Height="650" Width="700">
+
+    <Grid Name="grid" Height="600" Width="600" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <!-- Title -->
+        <Label Name="timerBlack" Content="Chess" FontWeight="ExtraBlack" FontSize="36" Foreground="White" FontFamily="Stormfaze" Grid.Row="0" HorizontalAlignment="Center" Margin="0,20"/>
+        
+        <!-- Login Fields -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+            <Label Name="lblLogin" Content="Login:" FontSize="16" Foreground="White" Margin="0,0,10,0"/>
+            <TextBox Width="150" Text="RogerRoca" Name="txtLogin" Margin="10,0" TextChanged="txtLogin_changed"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+            <Label Name="lblPass" Content="Password:" FontSize="16" Foreground="White" Margin="0,0,10,0"/>
+            <TextBox Width="150" FontFamily="WebDings" Text="20031994" Name="txtPass" Margin="10,0" TextChanged="txtPass_changed"/>
+        </StackPanel>
+
+        <!-- Hidden IP Field -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Hidden" Margin="0,10">
+            <Label Name="hostIP" Content="host IP:" Foreground="White" Margin="0,0,10,0"/>
+            <TextBox Text="192.168.0.11" Name="txtHost" />
+        </StackPanel>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
+            <Button Name="loginBtn" Content="Login" Width="120" Height="40" Click="login_click" Margin="0,0,10,0"/>
+            <Button Name="playBtn" Content="Play" Width="120" Height="40" Visibility="Hidden" Click="play_click" Margin="0,0,10,0"/>
+            <Button Name="createAccBtn" Content="Create Account" Width="150" Height="40" Click="createAcc_click"/>
+        </StackPanel>
+
+    </Grid>
+</Window>
