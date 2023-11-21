@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "3PhOsajwik0M2w91ntwDhMtR20AhWfp9wldqO3xbgVa0q8jhwp4/wgKkbvfYPSfjXj06RLwPBzy0ZAUADRyIIA==",
+  "dgSpecHash": "TjW39TtQGWwya2FeS9g74w+FojJ2r2xpU4jPtEhonkNzqG42fYPD0rgzOv6K/d9UnT+bcopW5p1/T2H+vKLgWA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\roca2\\OneDrive\\Documentos\\GitHub\\SistemesOperatiusProjecte\\Escacs.v2-3\\Chess.csproj",
+  "projectFilePath": "C:\\Users\\roca2\\OneDrive\\Documentos\\GitHub\\SistemesOperatiusProjecte\\Escacs.v4\\Chess.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\roca2\\.nuget\\packages\\deepcloner\\0.10.4\\deepcloner.0.10.4.nupkg.sha512",
     "C:\\Users\\roca2\\.nuget\\packages\\google.protobuf\\3.21.9\\google.protobuf.3.21.9.nupkg.sha512",
