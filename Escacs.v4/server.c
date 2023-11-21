@@ -9,6 +9,9 @@
 #include <openssl/sha.h>
 #include <openssl/evp.h>
 
+#include <stdlib.h> // For random number generation
+#include <time.h>   // For seeding the random number generator
+
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 5555
 #define BUFFER_SIZE 4096
@@ -313,14 +316,23 @@ void *handle_client(void *arg) {
                 int challenged_index = find_user_index(username_buffer); // The one who accepted the challenge
                 if (challenger_index != -1 && challenged_index != -1) {
                     char game_start_message[BUFFER_SIZE];
-                    snprintf(game_start_message, BUFFER_SIZE, "gameStart*%s!%s#1", online_users[challenged_index]->username, online_users[challenger_index]->username);
+
+                    // Seed the random number generator
+                    srand(time(NULL));
+
+                    // Randomly decide which player gets white
+                    int whiteIndex = rand() % 2 ? challenger_index : challenged_index;
+                    int blackIndex = whiteIndex == challenger_index ? challenged_index : challenger_index;
+
+                    snprintf(game_start_message, BUFFER_SIZE, "gameStart*%s!white*%s!black", online_users[whiteIndex]->username, online_users[blackIndex]->username);
+
                     send(online_users[challenger_index]->socket, game_start_message, strlen(game_start_message), 0);
                     send(online_users[challenged_index]->socket, game_start_message, strlen(game_start_message), 0);
                 } else {
                     // Handle case where one of the players is no longer available
                 }
             }
-        } else if (strstr(buffer, "challengeReject*") == buffer) {
+        }else if (strstr(buffer, "challengeReject*") == buffer) {
             char *rejectingUser = strchr(buffer, '*') + 1;
             if (rejectingUser) {
                 int rejectingUserIndex = find_user_index(rejectingUser);
@@ -336,9 +348,6 @@ void *handle_client(void *arg) {
             }
         }
 
-        
-        
-        
         
         else if (strstr(buffer, "createAccount*") == buffer) {
             char *username = buffer + 14;
