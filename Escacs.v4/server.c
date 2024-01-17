@@ -9,8 +9,10 @@
 #include <openssl/sha.h>
 #include <openssl/evp.h>
 
-#include <stdlib.h> // For random number generation
-#include <time.h>   // For seeding the random number generator
+#include <stdlib.h> // Testing per a l'assiganció de colors.
+
+#include <time.h>   
+
 
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 5555
@@ -51,10 +53,6 @@ void* periodic_broadcast(void *arg) {
 
     return NULL;
 }
-
-
-
-
 
 void add_user_without_broadcast(const char *username, int socket) {
     // Adds a user to the online_users array without broadcasting the list.
@@ -217,7 +215,6 @@ void broadcast_online_users() {
     pthread_mutex_unlock(&users_mutex);
 }
 
-
 int authenticate_user(const char *username, const char *password) {
     char query[512];
     snprintf(query, sizeof(query), "SELECT passwordHash FROM Users WHERE login = '%s'", username);
@@ -258,7 +255,6 @@ int authenticate_user(const char *username, const char *password) {
     return auth_result;
 }
 
-
 int create_user(const char *username, const char *password, const char *ip, const char *name) {
     char hashed_password[65];
     hashPassword(password, hashed_password);
@@ -280,7 +276,7 @@ void *handle_client(void *arg) {
     int client_socket = *(int*)arg;
     char buffer[BUFFER_SIZE];
     int bytes_read;
-    char username_buffer[256] = {0}; // Initialize username buffer to store the username for this session.
+    char username_buffer[256] = {0};
     char client_ip[INET_ADDRSTRLEN];
 
     struct sockaddr_in addr;
@@ -296,6 +292,19 @@ void *handle_client(void *arg) {
     while ((bytes_read = recv(client_socket, buffer, BUFFER_SIZE - 1, 0)) > 0) {
         buffer[bytes_read] = '\0';
         printf("Received message: %s\n", buffer);
+        if (strstr(buffer, "chat*") == buffer) {
+            char *recipient = strtok(buffer + 5, "*");
+            char *message = strtok(NULL, "*");
+
+            if (recipient && message) {
+                int recipient_index = find_user_index(recipient);
+                if (recipient_index != -1) {
+                    char formatted_message[BUFFER_SIZE];
+                    snprintf(formatted_message, BUFFER_SIZE, "chat*%s*%s", username_buffer, message); // username_buffer is the sender's username
+                    send(online_users[recipient_index]->socket, formatted_message, strlen(formatted_message), 0);
+                }
+            }
+        }
 
         if (strstr(buffer, "challenge*") == buffer) {
             char *challenged = strchr(buffer, '*') + 1;
@@ -306,7 +315,6 @@ void *handle_client(void *arg) {
                     snprintf(challenge_message, BUFFER_SIZE, "challengeR*%s", username_buffer);
                     send(online_users[challenged_index]->socket, challenge_message, strlen(challenge_message), 0);
                 } else {
-                    // Handle case where the challenged player is not found
                 }
             }
         } else if (strstr(buffer, "challengeAccept*") == buffer) {
@@ -320,7 +328,8 @@ void *handle_client(void *arg) {
                     // Seed the random number generator
                     srand(time(NULL));
 
-                    // Randomly decide which player gets white
+                    // Randomly decide which player gets white // Currently not working sicne both players geta ssigend black due to the
+                    // color being chosen upon the message. 
                     int whiteIndex = rand() % 2 ? challenger_index : challenged_index;
                     int blackIndex = whiteIndex == challenger_index ? challenged_index : challenger_index;
 
@@ -329,7 +338,7 @@ void *handle_client(void *arg) {
                     send(online_users[challenger_index]->socket, game_start_message, strlen(game_start_message), 0);
                     send(online_users[challenged_index]->socket, game_start_message, strlen(game_start_message), 0);
                 } else {
-                    // Handle case where one of the players is no longer available
+                    
                 }
             }
         }else if (strstr(buffer, "challengeReject*") == buffer) {
@@ -343,12 +352,10 @@ void *handle_client(void *arg) {
                     snprintf(rejection_message, BUFFER_SIZE, "challengeRejected*%s", online_users[rejectingUserIndex]->username);
                     send(online_users[challengerIndex]->socket, rejection_message, strlen(rejection_message), 0);
                 } else {
-                    // Handle case where one of the users is no longer available
+                 
                 }
             }
         }
-
-        
         else if (strstr(buffer, "createAccount*") == buffer) {
             char *username = buffer + 14;
             char *password = strchr(username, '!');
@@ -363,7 +370,6 @@ void *handle_client(void *arg) {
                     name++;
                 }
             }
-
             if (username && password && name && create_user(username, password, client_ip, name)) {
                 const char *message = "accountCreationROk*Account created successfully!";
                 send(client_socket, message, strlen(message), 0);
@@ -373,21 +379,20 @@ void *handle_client(void *arg) {
             }
         }
             else if (strstr(buffer, "movePiece*") == buffer) {
-                // Extract the sender's username and the move data
-                char* senderUsername = username_buffer; // The username of the sender
-                char* moveData = buffer; // The entire move data message
+                // Extract the sender's username and the move data:
 
-                // Find the opponent's username and their socket
+                char* senderUsername = username_buffer; // The username of the sender
+                char* moveData = buffer; // The entire move data message // Not working properly yet. 
+
+                // Find the opponent's username and their socket:
+
                 int opponentIndex = find_user_index(senderUsername); // Implement this based on your logic
                 if (opponentIndex != -1) {
                     // Forward the move data to the opponent's client
                     send(online_users[opponentIndex]->socket, moveData, strlen(moveData), 0);
                 } else {
-                    // Handle case where opponent is not found or not in a game
                 }
             }
-
-        
         else if (strstr(buffer, "login*") == buffer) {
             char *username = buffer + 6;
             char *password = strchr(username, '!');
@@ -397,7 +402,6 @@ void *handle_client(void *arg) {
                 if (authenticate_user(username, password)) {
                     strcpy(username_buffer, username);
                     add_user_without_broadcast(username, client_socket);
-
                     pthread_mutex_lock(&update_mutex);
                     pthread_cond_signal(&update_cond);
                     pthread_mutex_unlock(&update_mutex);
@@ -447,6 +451,7 @@ void *handle_client(void *arg) {
         }
 
         memset(buffer, 0, BUFFER_SIZE); // Clear the buffer after each command handling
+        // C has the drawback of memory issues so it is important to free it when no longer being used. 
     }
 
     if (bytes_read == 0) {
@@ -482,7 +487,6 @@ int main() {
         perror("Could not create socket");
         return 1;
     }
-
     struct sockaddr_in server_address;
     memset(&server_address, 0, sizeof(server_address));
     server_address.sin_family = AF_INET;
@@ -518,16 +522,16 @@ int main() {
 
     printf("Server is running on %s:%d\n", SERVER_IP, SERVER_PORT);
 
-    // Create the periodic broadcast thread
     pthread_t periodic_broadcast_thread;
     if (pthread_create(&periodic_broadcast_thread, NULL, periodic_broadcast, NULL) != 0) {
-        perror("Could not create the periodic broadcast thread");
+        perror("Could not create the broadcast thread");
         mysql_close(conn);
         close(server_socket);
         return 1;
     }
 
-    // Server main loop to accept incoming connections
+    // Server main loop to accept incoming connections:
+
     while (1) {
         struct sockaddr_in client_address;
         socklen_t client_address_len = sizeof(client_address);
@@ -538,20 +542,17 @@ int main() {
         }
 
         printf("Connection accepted from %s:%d\n", inet_ntoa(client_address.sin_addr), ntohs(client_address.sin_port));
-
         pthread_t thread_id;
         int *pclient_socket = malloc(sizeof(int));
         *pclient_socket = client_socket;
         if (pthread_create(&thread_id, NULL, handle_client, (void*)pclient_socket) < 0) {
             perror("Could not create thread");
             free(pclient_socket);
-            close(client_socket); // Ensure to close the client socket in case of failure
+            close(client_socket); 
         } else {
             pthread_detach(thread_id);
         }
     }
-
-    // Cleanup and close up shop
     mysql_close(conn);
     close(server_socket);
     return 0;

@@ -10,15 +10,15 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Name="midrow" Height="*"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="150"/>
-            <ColumnDefinition Name="midcol" Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
@@ -34,16 +34,24 @@
                Grid.Column="2" Panel.ZIndex="2" Width="200" 
                Height="50" Visibility="Hidden"/>
         <Label Name="gamesListTitle" Width="150" FontSize="12" FontWeight="Bold" Content="GAMES LIST" Foreground="#EDEDED" Grid.Row="1" Grid.Column="2" Panel.ZIndex="1"/>
+        <ListBox Name="gamesList" Grid.Row="2" Grid.Column="2" Background="#2D2D2D" Foreground="#EDEDED" BorderBrush="#4A4A4A"/>
+
         <Label Name="lblPlayersListTitle" Width="150" FontSize="12" FontWeight="Bold" Content="Players Online" Foreground="#EDEDED" Grid.Row="1" Grid.Column="3" Panel.ZIndex="1"/>
-        <ListBox Name="gamesList" Grid.Row="2" Grid.Column="2" Panel.ZIndex="1" Background="#2D2D2D" Foreground="#EDEDED" BorderBrush="#4A4A4A"/>
-        <ListBox Name="playersList" Grid.Row="2" Grid.Column="3" Background="#2D2D2D" Foreground="#EDEDED" BorderBrush="#4A4A4A" />
+        <ListBox Name="playersList" Grid.Row="2" Grid.Column="3" Background="#2D2D2D" Foreground="#EDEDED" BorderBrush="#4A4A4A"/>
+
+        <!-- Chat Section -->
+        <StackPanel Grid.Row="2" Grid.Column="4" Background="#333333" Margin="5">
+            <Label Content="Chat" Foreground="White" HorizontalAlignment="Center"/>
+            <ListBox x:Name="chatHistory" Background="#2D2D2D" Foreground="White" BorderBrush="#4A4A4A" Height="200"/>
+            <TextBox x:Name="txtMessage" Foreground="#212121" Background="White" Margin="5"/>
+            <Button Content="Send" Click="btnSend_Click" Foreground="#212121" Background="#EDEDED" BorderBrush="#4A4A4A" Margin="5"/>
+        </StackPanel>
+
         <ListBox Name="lstRankList" Grid.Row="2" Grid.Column="1"
-                  VerticalAlignment="Top" Margin="5,5,5,0" Height="180" Background="#2D2D2D" Foreground="#EDEDED" BorderBrush="#4A4A4A"/>
+                 VerticalAlignment="Top" Margin="5,5,5,0" Height="180" Background="#2D2D2D" Foreground="#EDEDED" BorderBrush="#4A4A4A"/>
         <ListBox Name="lstPlayerInfo" Grid.Row="2" Grid.Column="1" 
-                   VerticalAlignment="Bottom" Margin="10" Height="70" Background="#2D2D2D" Foreground="#EDEDED" BorderBrush="#4A4A4A"/>
-        <Label Width="100" FontSize="12" FontWeight="Bold" 
-               Content="User" Foreground="#EDEDED" Grid.Row="2" Grid.Column="1" Panel.ZIndex="1" Margin="25,190,25,85"/>
-        <Label Width="100" FontSize="12" FontWeight="Bold" 
-               Content="Ranking" Foreground="#EDEDED" Grid.Row="1" Grid.Column="1" Panel.ZIndex="1"/>
+                 VerticalAlignment="Bottom" Margin="10" Height="70" Background="#2D2D2D" Foreground="#EDEDED" BorderBrush="#4A4A4A"/>
+        <Label Content="User" Foreground="#EDEDED" Grid.Row="2" Grid.Column="1" Panel.ZIndex="1" Margin="25,190,25,85"/>
+        <Label Content="Ranking" Foreground="#EDEDED" Grid.Row="1" Grid.Column="1" Panel.ZIndex="1"/>
     </Grid>
 </Window>

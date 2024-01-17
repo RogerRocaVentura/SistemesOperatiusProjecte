@@ -90,15 +90,55 @@ namespace Chess
 
         void DataReceived(object sender, DataReceivedEventArgs e)
         {
-            //Console.WriteLine($"[{e.IpPort}] {Encoding.UTF8.GetString(e.Data)}");
-            string data = (Encoding.UTF8.GetString(e.Data));
+            string data = Encoding.UTF8.GetString(e.Data);
 
-            Dispatcher.Invoke(new Action(delegate
+            Dispatcher.Invoke(() =>
             {
-                GetData(data, e.IpPort);
-                //richTextBox1.Text += data;
-            }));
+                // Check if the message is a chat message
+                if (data.StartsWith("chat*"))
+                {
+                    // Assuming the format is "chat*sender*message"
+                    string[] parts = data.Split('*');
+                    if (parts.Length >= 3)
+                    {
+                        string senderName = parts[1];
+                        string message = parts[2];
+                        chatHistory.Items.Add($"{senderName}: {message}");
+                    }
+                }
+                else
+                {
+                    // Handle other types of data
+                    GetData(data, e.IpPort);
+                }
+            });
         }
+        private void btnSend_Click(object sender, RoutedEventArgs e)
+        {
+            // Assuming you want to send a message to a selected player from playersList
+            if (playersList.SelectedItem != null)
+            {
+                string recipient = playersList.SelectedItem.ToString();
+                string message = txtMessage.Text;
+
+                if (!string.IsNullOrWhiteSpace(message))
+                {
+                    string formattedMessage = $"chat*{recipient}*{message}";
+                    client.Send(formattedMessage);
+
+                    // Append the message to the chat history for the user to see
+                    chatHistory.Items.Add($"Me: {message}");
+
+                    txtMessage.Clear();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a recipient from the players list.");
+            }
+        }
+
+
 
         void GetData(string data, string userIP) ///////////////////////////////////////GET DATA //////////////////
         {   

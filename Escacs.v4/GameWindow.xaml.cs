@@ -266,12 +266,12 @@ namespace Chess
 
         private void Offer_Draw(object sender, RoutedEventArgs e)
         {
-
+                    //Podríem implementar-ho
         }
 
         private void Resign(object sender, RoutedEventArgs e)
         {
-
+                // Podríem implementar-ho
         }
         #region BoardDrawing
         public void DrawBoard()
