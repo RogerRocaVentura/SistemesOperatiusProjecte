@@ -11,7 +11,7 @@ namespace Chess
 {
     public partial class MainWindow : Window
     {
-        public event EventHandler<bool> LoginProcessed;
+        //public event EventHandler<bool> LoginProcessed;
 
         User user1 { get; set; }
         User user2 { get; set; }

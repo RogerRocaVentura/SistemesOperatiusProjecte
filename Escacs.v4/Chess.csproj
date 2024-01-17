@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
+    <NoWarn>$(NoWarn);SYSLIB0021</NoWarn>
     <UseWPF>true</UseWPF>
     <ApplicationIcon />
     <Win32Resource />
